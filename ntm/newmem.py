@@ -18,7 +18,7 @@ def softmax_0(Ks):
 if __name__ == "__main__":
     length = 5
     Ks = np.random.uniform(high=1, low=-1, size=(length,1))
-    print softmax_0(Ks)
+    print(softmax_0(Ks))
 
     # compute deltas automatically
     sm_grad = grad(softmax_0)
@@ -35,7 +35,8 @@ if __name__ == "__main__":
         den1 = np.sum(np.exp(Ks))
         manual_deltas[j] = num / (den1 * den1)
 
-    print "auto deltas"
-    print auto_deltas
-    print "manual deltas"
-    print manual_deltas
+    print("auto deltas")
+    print(auto_deltas)
+    print("manual deltas")
+    print(manual_deltas)
+

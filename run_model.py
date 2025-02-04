@@ -52,7 +52,7 @@ args = parser.parse_args()
 
 # create directory for serializations if necessary
 if args.serialize_to is not None:
-  print "Serializing to:", args.serialize_to
+  print("Serializing to:", args.serialize_to)
   try:
     os.mkdir(args.serialize_to)
   except OSError:
@@ -60,7 +60,7 @@ if args.serialize_to is not None:
 
 # if we use lr schedule, we need to keep track of errors over time
 if args.lr_rate is not None:
-  print "Using lr schedule rate of:", args.lr_rate
+  print("Using lr schedule rate of:", args.lr_rate)
   errors = {}
   error_sum = 0
 
@@ -75,7 +75,7 @@ if args.model is None:
   model = NTM(seq.in_size, seq.out_size, hidden_size, N, M, vec_size)
 else:
   # otherwise, load the model from specified file
-  print "Using saved model:", args.model
+  print("Using saved model:", args.model)
   model = deserialize(args.model)
   vec_size = model.vec_size # vec size comes from model
   seq = SequenceGen(args.task, vec_size, args.hi, args.lo)
@@ -102,16 +102,16 @@ while n < 10000:
 
   # sometimes print out diagnostic info
   if ((n % args.log_freq) == 0) or args.test_mode:
-    print 'iter %d' % (n)
+    print('iter %d' % (n))
     visualize(inputs, outputs, r, w, a, e)
 
     # log ratio of delta l2 norm to weight l2 norm
-    print "update/weight ratios:"
-    for k in model.W.keys():
-      print k + ": " + str(optimizer.qs[k])
+    print("update/weight ratios:")
+    for k in list(model.W.keys()):
+      print(k + ": " + str(optimizer.qs[k]))
 
-    print "trailing bpc estimate: ", bpc
-    print "this bpc: ", newbpc
+    print("trailing bpc estimate: ", bpc)
+    print("this bpc: ", newbpc)
 
   # maybe serialize
   if (args.serialize_to is not None) and (n % args.serialize_freq) == 0:
@@ -122,7 +122,7 @@ while n < 10000:
   if args.grad_check:
     # Check weights using finite differences
     check = gradCheck(model, deltas, inputs, targets, 1e-5, 1e-7)
-    print "PASS DIFF CHECK?: ", check
+    print("PASS DIFF CHECK?: ", check)
 
   if not args.test_mode:
     # optionally halve the learning rate if error has not gone down
@@ -133,10 +133,11 @@ while n < 10000:
         error_sum = 0
         if n > args.lr_rate: # don't do this for the first "epoch"
           if errors[n] > errors[n - args.lr_rate]:
-            print "halving learning rate!"
+            print("halving learning rate!")
             optimizer.lr /= 2
-            print "learning rate is now:", optimizer.lr 
+            print("learning rate is now:", optimizer.lr) 
 
     optimizer.update_weights(model.W, deltas)
 
   n += 1
+

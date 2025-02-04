@@ -15,17 +15,17 @@ def gradCheck(model, deltas, inputs, targets, epsilon, tolerance):
   diffs = getDiffs(model, deltas, inputs, targets, epsilon)
   answer = True
 
-  for diffTensor, name, delta in zip(diffs, model.W.keys(), deltas.values()):
+  for diffTensor, name, delta in zip(diffs, list(model.W.keys()), list(deltas.values())):
 
     if np.abs(diffTensor.max()) >= tolerance:
-      print "DIFF CHECK FAILS FOR TENSOR: ", name
-      print "DIFF TENSOR: "
-      print diffTensor
-      print "NUMERICAL GRADIENTS: "
+      print("DIFF CHECK FAILS FOR TENSOR: ", name)
+      print("DIFF TENSOR: ")
+      print(diffTensor)
+      print("NUMERICAL GRADIENTS: ")
       # diff = grad - delta => diff+delta = grad
-      print diffTensor + delta
-      print "BPROP GRADIENTS: "
-      print delta
+      print(diffTensor + delta)
+      print("BPROP GRADIENTS: ")
+      print(delta)
       answer = False
     else:
       pass
@@ -41,10 +41,10 @@ def getDiffs(model, deltas, inputs, targets, epsilon):
   """
 
   diff_tensors = []
-  for D in deltas.values():
+  for D in list(deltas.values()):
     diff_tensors.append(np.zeros_like(D))
 
-  for W,D,diffs in zip(model.W.values(), deltas.values(), diff_tensors):
+  for W,D,diffs in zip(list(model.W.values()), list(deltas.values()), diff_tensors):
   # for each weight tensor in our model
 
     i = np.random.randint(W.shape[0])
@@ -104,7 +104,7 @@ def serialize(filename, data):
   """
   Save state of the model to disk.
   """
-  print "serializing"
+  print("serializing")
   f = open(filename, 'w')
   pickle.dump(data,f)
   f.close()
@@ -113,7 +113,7 @@ def deserialize(filename):
   """
   Read state of the model from disk.
   """
-  print "deserializing"
+  print("deserializing")
   f = open(filename, 'r')
   result = pickle.load(f)
   f.close()
@@ -126,7 +126,7 @@ def toArray(dic,h,w):
   outList = []
   for k in dic:
     if k != -1:
-      outList.append(dic[k].tolist())
+      outList.append(list(dic[k]))
   outC = np.round(np.array(outList),2)
   outC = outC.T
   out = np.reshape(outC,(h,w))
@@ -141,18 +141,18 @@ def visualize(inputs, outputs, reads, writes, adds, erases):
   np.set_printoptions(formatter={'float': '{: 0.1f}'.format}, linewidth=150)
   out = toArray(outputs, hi, wi)
   ins = np.array(inputs.T,dtype='float')
-  print "inputs: "
-  print ins
-  print "outputs: "
-  print out
-  print "reads"
-  print reads
-  print "writes"
-  print writes
-  print "adds"
-  print adds
-  print "erases"
-  print erases
+  print("inputs: ")
+  print(ins)
+  print("outputs: ")
+  print(out)
+  print("reads")
+  print(reads)
+  print("writes")
+  print(writes)
+  print("adds")
+  print(adds)
+  print("erases")
+  print(erases)
 
 def unwrap(x):
   """
@@ -160,7 +160,7 @@ def unwrap(x):
   """
   if isinstance(x,dict):
     r = {}
-    for k, v in x.iteritems():
+    for k, v in x.items():
       if hasattr(v,'value'):
         r[k] = v.value
       else:
@@ -170,15 +170,15 @@ def unwrap(x):
     l = []
     for d in x:
       r = {}
-      for k, v in d.iteritems():
+      for k, v in d.items():
         if hasattr(v,'value'):
           r[k] = v.value
         else:
           r[k] = v
       l.append(r)
     return l
-  elif type(x) == np.numpy_extra.ArrayNode:
-    return x.value
+  elif type(x) == np.numpy_boxes.ArrayBox:
+    return x._value
   else:
     return x
 
@@ -285,3 +285,4 @@ def K_focus(Ks, b_t):
     n = sims
     d = np.sum(sims)
     return n/d
+

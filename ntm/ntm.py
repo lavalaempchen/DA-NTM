@@ -4,10 +4,10 @@ This module implements a neural turing machine.
 import math
 import autograd.numpy as np
 from autograd import grad, jacobian
-from util.util import rando, sigmoid, softmax, softplus, unwrap, sigmoid_prime, tanh_prime, compare_deltas, dKdu, softmax_grads, beta_grads, K_focus
-import memory
-import addressing
-from addressing import cosine_sim, shift
+import ntm.memory as memory
+import ntm.addressing as addressing
+from ntm.addressing import cosine_sim, shift
+from util.util import *
 import sys
 
 class NTM(object):
@@ -124,7 +124,7 @@ class NTM(object):
       mems[-1] = self.W['memsInit']
       loss = 0
 
-      for t in xrange(len(inputs)):
+      for t in range(len(inputs)):
 
         xs[t] = np.reshape(np.array(inputs[t]),inputs[t].shape[::-1])
 
@@ -206,7 +206,7 @@ class NTM(object):
       Ordering of the operations is reverse of that in fprop()
       """
       deltas = {}
-      for key, val in params.iteritems():
+      for key, val in params.items():
         deltas[key] = np.zeros_like(val)
 
       [loss, mems, ps, ys, os, zos, hs, zhs, xs, rs, w_rs,
@@ -221,7 +221,7 @@ class NTM(object):
       du_w = {}
       dwg_r = {}
       dwg_w = {}
-      for t in reversed(xrange(len(targets))):
+      for t in reversed(range(len(targets))):
 
         dy = np.copy(ps[t])
         dy -= targets[t].T # backprop into y
@@ -568,6 +568,7 @@ class NTM(object):
     deltas = bprop(self.W, manual_grad)
     [loss, mems, ps, ys, os, zos, hs, zhs, xs, rs, w_rs,
      w_ws, adds, erases, k_rs, k_ws, g_rs, g_ws, wc_rs, wc_ws,
-     zbeta_rs, zbeta_ws, zs_rs, zs_ws, wg_rs, wg_ws] = map(unwrap, self.stats)
+     zbeta_rs, zbeta_ws, zs_rs, zs_ws, wg_rs, wg_ws] = list(map(unwrap, self.stats))
 
     return loss, deltas, ps, w_rs, w_ws, adds, erases
+

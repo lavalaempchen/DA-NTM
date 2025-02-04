@@ -36,7 +36,7 @@ class RMSProp(object):
     self.gs  = {} # store the mean, which will later be squared
     self.ms  = {} # momentum
     self.qs  = {} # update norm over param norm - ideally this stays around 10e-3
-    for k, v in W.iteritems():
+    for k, v in W.items():
       self.ns[k]  = np.zeros_like(v)
       self.gs[k]  = np.zeros_like(v)
       self.ms[k]  = np.zeros_like(v)
@@ -49,7 +49,7 @@ class RMSProp(object):
 
     We update params based on dparams.
     """
-    for k in params.keys():
+    for k in list(params.keys()):
       p = params[k]
       d = dparams[k]
 
@@ -61,3 +61,4 @@ class RMSProp(object):
       self.ms[k] = self.d * self.ms[k] - self.lr * (d / (np.sqrt(n - g*g + 1e-8)))
       self.qs[k] = self.b * self.qs[k] + (1 - self.b) * (l2(self.ms[k]) / l2(p))
       p += self.ms[k]
+

@@ -34,7 +34,7 @@ if __name__ == "__main__":
     M = 5
     u = np.random.uniform(high=1, low=-1, size=(M,))
     v = np.random.uniform(high=1, low=-1, size=(M,))
-    print cosine_sim(u,v)
+    print(cosine_sim(u,v))
 
     # compute deltas automatically
     # just with respect to u
@@ -55,12 +55,13 @@ if __name__ == "__main__":
     manual_deltas = a - b*c
     
 
-    print "auto deltas"
-    print auto_deltas
-    print "manual deltas"
-    print manual_deltas
+    print("auto deltas")
+    print(auto_deltas)
+    print("manual deltas")
+    print(manual_deltas)
 
     """
     manual_deltas gives us dk_i / dK_j
     """
+
 
