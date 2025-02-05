@@ -1,6 +1,17 @@
+# Note of Fork 
+
+This is a working NTM forked and refactored to Python 3 for a University Exam. 
+Changes made to this code include the following:
+- Syntax changes from Python 2 to Python 3
+- Autograd Updates inside the Code, as used *ArrayNode* function do not longer exist
+- Changing some instances to list
+
+All other code is written by Doctor Teeth and I do NOT claim their work as mine.
+
+
 # Differentiable Memory
 
-Reference implementations of various differentiable memory schemes for neural networks, in pure numpy.
+Reference implementations of a Neural Turing Machine in pure numpy.
 These are meant to serve as correctness checks against which higher performance batched GPU implementations can be evaluated.
 
 ## Code Structure
@@ -24,12 +35,11 @@ The root directory contains dotfiles and `run_model.py`, the latter of which all
 
 You will need to install the autograd library (`pip install autograd`). 
 I'm using autograd to do the backprop, since the architecture of the models is still in flux, but I found (at least when benchmarked using a GRU I have) that it's about 8x slower than doing backprop manually (maybe this is operator error?), so once I'm sure that everything is working properly I'll probably get rid of that dependency.
-The code is Python 2.7.
+The code is Python 3.11.
 
 ## Models
 
 Currently, only the Neural Turing Machine is implemented.
-I'd also like to implement some of the stuff from [Learning to Transduce with Unbounded Memory](http://arxiv.org/pdf/1506.02516v1.pdf), but it's unclear whether I'll have time (or whether it will be worth doing, given the generality of NTMs).
 
 ### Neural Turing Machine
 
